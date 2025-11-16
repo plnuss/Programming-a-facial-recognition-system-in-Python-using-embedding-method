@@ -1,0 +1,4 @@
+[2025-08-14 14:59:50] Pierre-Louis : D�but d�tection
+[2025-08-14 15:20:02] Pierre-Louis : Début détection
+[2025-08-14 15:20:11] Pierre-Louis : Fin détection (durée : 0 min 9 s)
+[2025-08-14 15:20:14] 9ac20a04-2cb6-4cf7-80c8-29aab3dc2c2e : Début détection

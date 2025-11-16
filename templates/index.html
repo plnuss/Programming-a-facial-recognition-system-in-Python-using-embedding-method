@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gestion des identités</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Gestion des identités</h1>
+        <div class="tabs">
+            <button
+                class="tab-button px-4 py-2 bg-blue-500 text-white rounded-tl-md"
+                onclick="openTab('known')"
+            >
+                Personnes connues
+            </button>
+            <button
+                class="tab-button px-4 py-2 bg-gray-300 text-gray-800 rounded-tr-md"
+                onclick="openTab('unknown')"
+            >
+                Personnes inconnues
+            </button>
+        </div>
+
+        <div id="known" class="tab-content">
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"
+            >
+                {% for id, name in known_faces.items() %}
+                <div class="bg-white p-4 rounded shadow">
+                    <input type="checkbox" class="identity-checkbox" data-id="{{ id }}" />
+                    <img
+                        src="/faces/{{ id }}.jpg"
+                        alt="{{ name }}"
+                        class="w-full h-32 object-cover mb-2"
+                    />
+                    <p class="text-center">{{ name }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="unknown" class="tab-content hidden">
+            <div
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"
+            >
+                {% for id, name in unknown_faces.items() %}
+                <div class="bg-white p-4 rounded shadow">
+                    <input type="checkbox" class="identity-checkbox" data-id="{{ id }}" />
+                    <img
+                        src="/faces/{{ id }}.jpg"
+                        alt="{{ name }}"
+                        class="w-full h-32 object-cover mb-2"
+                    />
+                    <p class="text-center">{{ name }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mt-4 flex justify-between items-center">
+            <div class="flex space-x-4">
+                <div>
+                    <!-- Bouton renommage déclenche la modale -->
+                    <button
+                        onclick="openRenameModal()"
+                        class="bg-blue-500 text-white px-4 py-2 rounded"
+                    >
+                        Renommer
+                    </button>
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        id="merge-input"
+                        class="border p-2 rounded"
+                        placeholder="Nom pour fusion"
+                    />
+                    <button
+                        onclick="mergeIdentities()"
+                        class="bg-green-500 text-white px-4 py-2 rounded ml-2"
+                    >
+                        Fusionner
+                    </button>
+                </div>
+            </div>
+            <div>
+                <button
+                    onclick="deleteIdentities()"
+                    class="bg-red-500 text-white px-4 py-2 rounded"
+                >
+                    Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale de renommage -->
+    <div
+      id="rename-modal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+    >
+      <div class="bg-white rounded p-6 w-96 shadow-lg">
+        <h2 class="text-xl font-bold mb-4">Renommer l'identité</h2>
+        <form id="rename-form" class="space-y-4">
+          <div>
+            <label for="prenom" class="block font-semibold mb-1">Prénom :</label>
+            <input
+              type="text"
+              id="prenom"
+              name="prenom"
+              class="w-full border rounded p-2"
+              required
+            />
+          </div>
+          <div>
+            <label for="nom" class="block font-semibold mb-1 flex items-center">
+              Nom :
+              <input
+                type="checkbox"
+                id="prenom-seul"
+                name="prenom-seul"
+                class="ml-2"
+              />
+              <span class="ml-2 text-sm text-gray-600"
+                >Utiliser uniquement le prénom</span
+              >
+            </label>
+            <input
+              type="text"
+              id="nom"
+              name="nom"
+              class="w-full border rounded p-2 mt-1"
+              required
+            />
+          </div>
+          <div class="flex justify-end space-x-4">
+            <button
+              type="button"
+              onclick="closeRenameModal()"
+              class="px-4 py-2 rounded border border-gray-400"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Valider
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            document.querySelectorAll(".tab-content").forEach((tab) =>
+                tab.classList.add("hidden")
+            );
+            document.getElementById(tabName).classList.remove("hidden");
+            document.querySelectorAll(".tab-button").forEach((btn) => {
+                btn.classList.replace("bg-blue-500", "bg-gray-300");
+                btn.classList.replace("text-white", "text-gray-800");
+            });
+            const activeBtn = document.querySelector(
+                `button[onclick="openTab('${tabName}')"]`
+            );
+            activeBtn.classList.replace("bg-gray-300", "bg-blue-500");
+            activeBtn.classList.replace("text-gray-800", "text-white");
+        }
+        openTab("known"); // Ouvre l'onglet "connues" par défaut
+    </script>
+
+    <script src="/static/js/scripts.js"></script>
+</body>
+</html>
